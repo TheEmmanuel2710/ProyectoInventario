@@ -298,7 +298,7 @@ def vistaRegistrarElementosDevolutivos(request):
         mensaje="Debe iniciar sesión"
         return render(request, "frmIniciarSesion.html",{"mensaje":mensaje})
     
-def registrarElementos(request):
+def registrarElementosDevolutivos(request):
     estado = False
     try:
         #datos del elemento en general
