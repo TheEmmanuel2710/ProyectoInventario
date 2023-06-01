@@ -51,7 +51,9 @@ function registroDetalleEntrada() {
         "entregadoPor": $("#txtEntregadoPor").val(),
         "proveedor": $("#cbProveedor").val(),
         "recibidoPor": $("#cbRecibidoPor").val(),
+        "observaciones":$("#txtObservaciones").val(),
         "fechaHora": $("#txtFechaEntrega").val(),
+
         "detalle": JSON.stringify(entradaMateriales),
     };
     $.ajax({

@@ -57,6 +57,12 @@
                         {% endfor %}
                     </select>
                 </div>
+                <div class="form-group row mt-2 ">
+                    <div class="mb-3 col-lg-12">
+                        <label for="txtObservaciones" class="fw-bold">Observaciones:</label>
+                        <textarea name="txtObservaciones" id="txtObservaciones" class="form-control" cols="30"
+                            rows="5"></textarea>
+                    </div>
             </div>
         </form>
         <div class="form-group">
@@ -118,17 +124,6 @@
 
                                 </select>
                             </div>
-                            <!-- <div class="col-lg-6 mb-3">
-                                <label>Ingrese Nombre Material
-                                    <input list="materiales" name="txtMaterial" class="form-control" /></label>
-                                    <datalist id="materiales">
-                                        {% for material in materiales %}
-                                        <option value="{{material.matElemento.eleCodigo}}">{{material.matElemento.eleCodigo}}-{{material.matElemento.eleNombre}}</option>
-                                        {% endfor %}
-                                      
-                                    </datalist>
-                            </div>-->
-
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-3 mb-3">
