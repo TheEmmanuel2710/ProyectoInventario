@@ -21,48 +21,44 @@
 <h3 class="text-center fw-bold">REGISTRAR ENTRADA DE MATERIALES</h3>
 <div class="principal" style="width: 100%;">
     <div id="datosGenerales">
-        <div class="form-group row">
-            <div class="col-lg-6 mb-3">
-                <label for="txtFactura" class="fw-bold">Código Factura:</label>
-                <input type="number" name="txtFactura" value="1" id="txtFactura" class="form-control" required>
+        <form action="" id="frmDatosGenerales">
+            <div class="form-group row">
+                <div class="col-lg-6 mb-3">
+                    <label for="txtFactura" class="fw-bold">Código Factura:</label>
+                    <input type="number" name="txtFactura" value="1" id="txtFactura" class="form-control" required>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <label for="txtFechaEntrega" class="fw-bold">Fecha Entrega:</label>
+                    <input type="Date" name="txtFechaEntrega" id="txtFechaEntrega" class="form-control" required>
+                </div>
             </div>
-            <div class="col-lg-6 mb-3">
-                <label for="txtFechaEntrega" class="fw-bold">Fecha Entrega:</label>
-                <input type="Date" name="txtFechaEntrega" id="txtFechaEntrega" class="form-control" required>
+            <div class="form-group row">
+                <div class="col-lg-4 mb-3">
+                    <label for="txtEntregadoPor" class="fw-bold">Entregado Por:</label>
+                    <input type="text" name="txtEntregadoPor" id="txtEntregadoPor" class="form-control" required>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <label for="cbProveedor" class="fw-bold">Proveedor:</label>
+                    <select name="cbProveedor" id="cbProveedor" class="form-select">
+                        <option value="">Seleccione</option>
+                        {% for proveedor in proveedores %}
+                        <option value="{{proveedor.id}}">{{proveedor.proNombre}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <label for="cbRecibidoPor" class="fw-bold">Recibido Por:</label>
+                    <select name="cbRecibidoPor" id="cbRecibidoPor" class="form-select">
+                        <option value="">Seleccione</option>
+                        {% for usuario in usuarios %}
+                        {% if usuario.username != 'admin' %}
+                        <option value="{{usuario.id}}">{{usuario.first_name}} {{usuario.last_name}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-lg-4 mb-3">
-                <label for="txtEntregadoPor" class="fw-bold">Entregado Por:</label>
-                <input type="text" name="txtEntregadoPor" id="txtEntregadoPor" class="form-control" required>
-            </div>
-            <div class="col-lg-4 mb-3">
-                <label for="cbProveedor" class="fw-bold">Proveedor:</label>
-                <select name="cbProveedor" id="cbProveedor" class="form-select">
-                    <option value="">Seleccione</option>
-                    {% for proveedor in proveedores %}
-                    <option value="{{proveedor.id}}">{{proveedor.proNombre}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-lg-4 mb-3">
-                <label for="cbRecibidoPor" class="fw-bold">Recibido Por:</label>
-                <select name="cbRecibidoPor" id="cbRecibidoPor" class="form-select">
-                    <option value="">Seleccione</option>
-                    {% for usuario in usuarios %}
-                    {% if usuario.username != 'admin' %}
-                    <option value="{{usuario.id}}">{{usuario.first_name}} {{usuario.last_name}}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="form-group row mt-2 ">
-            <div class="mb-3 col-lg-12">
-                <label for="txtDescripcion" class="fw-bold">Descripción:</label>
-                <textarea name="txtDescripcion" id="txtDescripcion" class="form-control" cols="30" rows="5"></textarea>
-            </div>
-        </div>
+        </form>
         <div class="form-group">
             <button type="button" id="btnAbrirModalAnexarMaterial" class="btn btn-secondary" data-bs-toggle="modal"
                 data-bs-target="#modalMaterial">
@@ -82,7 +78,6 @@
                     <th>Precio</th>
                     <th>Unidad Medida</th>
                     <th>Estado</th>
-                    <th>Observaciones</th>
                 </tr>
             </thead>
             <tbody id="datosTablaMateriales">

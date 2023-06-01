@@ -51,8 +51,7 @@ function registroDetalleEntrada() {
         "entregadoPor": $("#txtEntregadoPor").val(),
         "proveedor": $("#cbProveedor").val(),
         "recibidoPor": $("#cbRecibidoPor").val(),
-        "observaciones": $("#txtDescripcion").val(),
-        "fechaHora": $("#txtFecha").val(),
+        "fechaHora": $("#txtFechaEntrega").val(),
         "detalle": JSON.stringify(entradaMateriales),
     };
     $.ajax({
@@ -86,7 +85,6 @@ function agregarMaterialDetalle() {
             "precio": $("#txtPrecio").val(),
             "idUnidadMedida": $("#cbUnidadMedida").val(),
             "estado": $("#cbEstado").val(),
-            "observaciones": $("#txtDescripcion").val(),
         }
         entradaMateriales.push(material);
         frmEntradaMaterial.reset();

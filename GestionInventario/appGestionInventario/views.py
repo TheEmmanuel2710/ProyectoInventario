@@ -164,8 +164,8 @@ def registrarEntradaMaterial(request):
                     precio=int(detalle['precio'])
                     estado=detalle['estado']
                     unidadaMedida=UnidadMedida.objects.get(pk=int(detalle['idUnidadMedida']))
-                    detalleEntrada=DetalleEntradaMaterial(detEntradaMatarial=entradaMaterial,
-                                                          detMaterial=material,detUnidadMedida=unidadaMedida,
+                    detalleEntrada=DetalleEntradaMaterial(detEntradaMaterial=entradaMaterial,
+                                                          detMaterial=material,matUnidadMedida=unidadaMedida,
                                                           detCantidad=cantidad,detPrecioUnitario=precio,detEstado=estado)
                     detalleEntrada.save()
                 estado=True
@@ -255,15 +255,26 @@ def salir(request):
     return render(request, "frmIniciarSesion.html",
                   {"mensaje":"Ha cerrado la sesión"})
 
-def SolicitarElementos(request):
-    elementos = Elemento.objects.all()
-    materiales = Material.objects.all()
-    
-    json = {
-        "elementos": elementos,
-        "materiales": materiales,
-    }
-    return render(request, "instructor/solicitarElementos.html", json)
+def GestionarSolicitudesI(request):
+    if request.user.is_authenticated:
+        usuarios=User.objects.all()
+        retorno = {"usuarios":usuarios,"user":request.user}
+        return render(request,"instructor/vistaGestionarSolicitudes.html",retorno)
+    else:
+        mensaje="Debe iniciar sesión"
+        return render(request, "frmIniciarSesion.html",{"mensaje":mensaje})
+
+def vistaRegistrarSolicitud(request):
+     if request.user.is_authenticated:
+         unidadesMedida = UnidadMedida.objects.all()
+         fichas=Ficha.objects.all()
+         elementos=Elemento.objects.all()
+         retorno = {"unidadesMedida":unidadesMedida,"fichas":fichas,"elementos":elementos,"user":request.user}
+         return render(request,"instructor/frmRegistrarSolicitud.html",retorno)
+     else:
+         mensaje="Debe iniciar sesión"
+         return render(request, "frmIniciarSesion.html",{"mensaje":mensaje})
+
 
 def enviarCorreo (asunto=None, mensaje=None, destinatario=None): 
     remitente = settings.EMAIL_HOST_USER 
