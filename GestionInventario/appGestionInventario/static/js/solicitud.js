@@ -1,6 +1,6 @@
 let materiales = []
 let unidadesMedida = []
-let entradaMateriales = []
+let solicitudes = []
 
 $(function () {
     $.ajaxSetup({
@@ -8,11 +8,14 @@ $(function () {
             'X-CSRFToken': getCookie('csrftoken')
         }
     })
-    $("#btnAgregarMaterialDetalle").click(function() {
-        agregarMaterialDetalle();
+    $("#btnAgregarSolicitudDetalle").click(function() {
+        agregarSolicitudDetalle();
     })
-    $("#btnRegistrarDetalle").click(function() {
-        registroDetalleEntrada();
+    $("#entradaMaterial").click(function() {
+        vistaEntradaMaterial();
+    })
+    $("#btnRegistrarSolicitud").click(function() {
+        registroDetalleSolicitud();
     })
 })
 
@@ -42,19 +45,18 @@ function getCookie(name) {
  * Realiza la peticion ajax para registrar
  * la entrada de materiales 
  */
-function registroDetalleEntrada() {
+function registroDetalleSolicitud() {
     var datos = {
-        "codigoFactura": $("#txtFactura").val(),
-        "entregadoPor": $("#txtEntregadoPor").val(),
-        "proveedor": $("#cbProveedor").val(),
-        "recibidoPor": $("#cbRecibidoPor").val(),
-        "observaciones":$("#txtObservaciones").val(),
-        "fechaHora": $("#txtFechaEntrega").val(),
+        "Ficha": $("#cbFicha").val(),
+        "proyecto": $("#txtProyecto").val(),
+        "fechaR": $("#txtFechaRequerida").val(),
+        "fechaF":$("#txtFechaFinal").val(),
+        "observaciones": $("#txObservaciones").val(),
 
-        "detalle": JSON.stringify(entradaMateriales),
+        "detalle": JSON.stringify(solicitudes),
     };
     $.ajax({
-        url: "/registrarEntradaMaterial/",
+        url: "/vistaRegistrarSolicitud/",
         data: datos,
         type: 'post',
         dataType: 'json',
@@ -63,10 +65,10 @@ function registroDetalleEntrada() {
             console.log(resultado);
             if (resultado.estado) {
                 frmDatosGenerales.reset();
-                entradaMateriales.length = 0;
+                solicitudes.length = 0;
                 mostrarDatosTabla();
             }
-            Swal.fire("Registro de Materiales", resultado.mensaje, "success");
+            Swal.fire("Registro de Solicitudes", resultado.mensaje, "success");
         }
     })
 }
@@ -74,42 +76,40 @@ function registroDetalleEntrada() {
  * Agrega cada material al arreglo de entredaMateriales,
  * primero valida que no se haya agregado previamente
  */
-function agregarMaterialDetalle() {
+function agregarSolicitudDetalle() {
     //Averigua si ya se ha agregado el material
-    const m = entradaMateriales.find(material => material.idMaterial == $("#cbMaterial").val());
+    const m = solicitudes.find(material => material.idMaterial == $("#cbMaterial").val());
     if (m == null) {
         const material = {
             "idMaterial": $("#cbMaterial").val(),
             "cantidad": $("#txtCantidad").val(),
-            "precio": $("#txtPrecio").val(),
             "idUnidadMedida": $("#cbUnidadMedida").val(),
             "estado": $("#cbEstado").val(),
         }
-        entradaMateriales.push(material);
-        frmEntradaMaterial.reset();
+        solicitudes.push(material);
+        frmSolicitudM.reset();
         mostrarDatosTabla();
     } else {
-        Swal.fire("Entrada Materiales",
+        Swal.fire("Solicitud Materiales",
             "El material seleccionado ya se ha agregado en el detalle", "info");
     }
 }
 
 function mostrarDatosTabla() {
     datos = "";
-    entradaMateriales.forEach(entrada => {
+    solicitudes.forEach(entrada => {
         posM = materiales.findIndex(material => material.idMaterial == entrada.idMaterial);
         posU = unidadesMedida.findIndex(unidad => unidad.id == entrada.idUnidadMedida);
         datos += "<tr>";
         datos += "<td class='text-center'>" + materiales[posM].codigo + "</td>";
         datos += "<td>" + materiales[posM].nombre + "</td>";
         datos += "<td class='text-center'>" + entrada.cantidad + "</td>";
-        datos += "<td class='text-end'>" + entrada.precio + ".00" + "</td>";
         datos += "<td>" + unidadesMedida[posU].nombre + "</td>";
-        datos += "<td class='text-center'>" + entrada.estado + "</td>";
+        datos += "<td class='text-center'>" + entrada.observaciones + "</td>";
         datos += "</tr>";
     });
-    //Agregar a la tabla con id datosTablaMateriales
-    datosTablaMateriales.innerHTML=datos;
+    //Agregar a la tabla con id datosTablaSolicitudes
+    datosTablaSolicitudes.innerHTML=datos;
 }
 
 /**

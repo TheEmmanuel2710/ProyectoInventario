@@ -175,7 +175,7 @@ def registrarEntradaMaterial(request):
             mensaje=f"{error}"
         retorno={"estado":estado,"mensaje":mensaje}
         return JsonResponse(retorno)
-    
+
     
 def registrarMaterial(request):
     estado = False
@@ -275,6 +275,38 @@ def vistaRegistrarSolicitud(request):
          mensaje="Debe iniciar sesión"
          return render(request, "frmIniciarSesion.html",{"mensaje":mensaje})
 
+def registrarSolicitud(request):
+    if request.method=='POST':
+        try:
+            with transaction.atomic():
+                estado=False
+                ficha=int(request.POST['Ficha'])
+                proyecto=request.POST['proyecto']
+                fechaRequerida= request.POST['fechaR']
+                fechaFinal= request.POST['fechaF']
+                observaciones=request.POST['observaciones']
+                solicitudElemento=SolicitudElemento(solFicha=ficha,solProyecto=proyecto,
+                                                solFechaHoraRequerida=fechaRequerida,solFechaHoraFin=fechaFinal,
+                                                solObservaciones=observaciones)
+                solicitudElemento.save()
+                detalleSolicitudes=json.loads(request.POST['detalle'])
+                for detalle in detalleSolicitudes:
+                    elemento=Elemento.objects.get(id=int(detalle['idElemento']))
+                    cantidad=int(detalle['cantidad'])
+                    estado=detalle['estado']
+                    unidadaMedida=UnidadMedida.objects.get(pk=int(detalle['idUnidadMedida']))
+                    detalleSolicitud=SolicitudElemento(detSolicitud=solicitudElemento,
+                                                          detElemento=elemento,detUnidadMedida=unidadaMedida,
+                                                          detCantidadRequerida=cantidad,solEstado=estado)
+                    detalleSolicitud.save()
+                estado=True
+                mensaje="Se ha registrado la solicitud del elemento correctamente"
+        except Error as error:
+            transaction.rollback()
+            mensaje=f"{error}"
+        retorno={"estado":estado,"mensaje":mensaje}
+        return JsonResponse(retorno)
+    
 
 def enviarCorreo (asunto=None, mensaje=None, destinatario=None): 
     remitente = settings.EMAIL_HOST_USER 
